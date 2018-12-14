@@ -30,9 +30,12 @@ class SentMemesTableViewController: UITableViewController {
             tmpCell = UITableViewCell(style: .default, reuseIdentifier: "MemeTableViewCell") as! MemeTableViewCell
         }
         let row = (indexPath as NSIndexPath).row
+        
         tmpCell.memeImage.image =  memes[ row ].memedImage
         tmpCell.topLabel.text = memes[ row ].topText
         tmpCell.bottomLabel.text = memes[row].bottomText
+        tmpCell.topLabel.lineBreakMode = .byTruncatingHead
+        
         
         return tmpCell
     }
@@ -40,9 +43,9 @@ class SentMemesTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.tableView.rowHeight = CGFloat(100.00)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(SentMemesTableViewController.addMeme))
-
+    
     }
     
     override func viewDidAppear(_ animated: Bool) {
