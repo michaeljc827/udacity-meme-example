@@ -8,16 +8,54 @@
 
 import UIKit
 
-class SentMemesTableViewController: UIViewController {
+class SentMemesTableViewController: UITableViewController {
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+        var memes: [Meme]{
         
-        //let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        //memes = appDelegate.memes
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        return appDelegate.memes
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return memes.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        var tmpCell: MemeTableViewCell
+        
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "MemeTableViewCell") {
+            tmpCell = cell as! MemeTableViewCell
+        } else {
+            tmpCell = UITableViewCell(style: .default, reuseIdentifier: "MemeTableViewCell") as! MemeTableViewCell
+        }
+        let row = (indexPath as NSIndexPath).row
+        tmpCell.memeImage.image =  memes[ row ].memedImage
+        tmpCell.topLabel.text = memes[ row ].topText
+        tmpCell.bottomLabel.text = memes[row].bottomText
+        
+        return tmpCell
     }
     
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(SentMemesTableViewController.addMeme))
 
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        tableView.reloadData()
+    }
+    
+    @objc func addMeme(){
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let createController = storyboard.instantiateViewController(withIdentifier: "MemeCreatorViewController")
+        self.present(createController,animated: true, completion: nil)
+        
+    }
+    
 }

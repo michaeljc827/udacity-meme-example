@@ -10,39 +10,44 @@ import UIKit
 
 class SentMemesCollectionViewController: UICollectionViewController {
 
-    var memes: [Meme]!
+    @IBOutlet var collectionViewOutlet: UICollectionView!
+    
+    var memes: [Meme]! {
+        let object = UIApplication.shared.delegate
+        let appDelegate = object as! AppDelegate
+        return appDelegate.memes
+    }
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
-        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(SentMemesCollectionViewController.addMeme))
+    }
     
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Test", style: .plain, target: self, action: #selector(SentMemesCollectionViewController.addMeme) )
-        
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        self.memes = appDelegate.memes
-        
+    override func viewWillAppear(_ animated: Bool) {
+        collectionView!.reloadData()
     }
     
     @objc func addMeme(){
-        if let navigationController = self.navigationController {
-            let createController = MemeCreatorViewController()
-            navigationController.pushViewController(createController, animated: true)
-        }
+            
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let createController = storyboard.instantiateViewController(withIdentifier: "MemeCreatorViewController")
+        self.present(createController,animated: true, completion: nil)
+        
     }
-
-    
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let memeCount = memes?.count {
-            return memeCount
-        } else {
-            return 0
-        }
+        
+        print("Determining rows \(self.memes.count)")
+
+        return self.memes.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MemeCollectionViewCell", for: indexPath) as! MemeCollectionViewCell
         let meme = memes[ (indexPath as NSIndexPath).row ]
+ 
+        print("Creating cell")
         
         cell.memeImage?.image = meme.memedImage
         

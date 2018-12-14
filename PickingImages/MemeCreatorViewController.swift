@@ -15,6 +15,9 @@ UINavigationControllerDelegate, UITextFieldDelegate{
     //Used to determine which text field is being used. So we can move screen up if keyboard is hiding it
     var activeField: UITextField?
     
+    
+    @IBOutlet weak var cancelButton: UIBarButtonItem!
+    
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var cameraButton: UIBarButtonItem!
     @IBOutlet weak var topTextLabel: UITextField!
@@ -24,6 +27,9 @@ UINavigationControllerDelegate, UITextFieldDelegate{
     @IBOutlet weak var shareButton: UIBarButtonItem!
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        
+        
         //Disable Camera Button if no camera on device
         cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
         
@@ -52,6 +58,7 @@ UINavigationControllerDelegate, UITextFieldDelegate{
     }
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
     }
     
@@ -146,14 +153,15 @@ UINavigationControllerDelegate, UITextFieldDelegate{
     
     //Functions to save and share meme
     func save() {
+        
         let memedImage = self.generateMemedImage()
+        
         //Create the meme
         let meme = Meme(topText: self.topTextLabel.text!,bottomText: self.bottomTextLabel.text!,originalImage: self.imageView.image!,memedImage: memedImage)
         
         let object = UIApplication.shared.delegate
         let appDelegate = object as! AppDelegate
         appDelegate.memes.append(meme)
-        
     }
     
     func generateMemedImage() -> UIImage {
@@ -180,11 +188,17 @@ UINavigationControllerDelegate, UITextFieldDelegate{
         activityViewController.completionWithItemsHandler = { activity, success, items, error in
             if (success == true){
                 self.save()
+                self.dismiss(animated: true, completion: nil)
             }
         }
         present(activityViewController,animated: true,completion: nil)
-        
     }
+    
+    @IBAction func cancelButtonPress(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    
 }
 
 //Dismiss keyboard when user touches outside text field while editing
