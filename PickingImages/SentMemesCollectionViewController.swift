@@ -48,9 +48,6 @@ class SentMemesCollectionViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        print("Determining rows \(self.memes.count)")
-
         return self.memes.count
     }
     
@@ -58,8 +55,6 @@ class SentMemesCollectionViewController: UICollectionViewController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MemeCollectionViewCell", for: indexPath) as! MemeCollectionViewCell
         let meme = memes[ (indexPath as NSIndexPath).row ]
  
-        print("Creating cell")
-        
         cell.memeImage?.image = meme.memedImage
         
         return cell

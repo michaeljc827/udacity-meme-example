@@ -10,10 +10,13 @@ import UIKit
 
 class SentMemesTableViewController: UITableViewController {
     
-        var memes: [Meme]{
-        
+    var memes: [Meme]{
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         return appDelegate.memes
+    }
+    
+    func configureMemeLabel(_ label:UILabel){
+        
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -34,15 +37,21 @@ class SentMemesTableViewController: UITableViewController {
         tmpCell.memeImage.image =  memes[ row ].memedImage
         tmpCell.topLabel.text = memes[ row ].topText
         tmpCell.bottomLabel.text = memes[row].bottomText
-        tmpCell.topLabel.lineBreakMode = .byTruncatingHead
-        
-        
+    
         return tmpCell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = storyboard?.instantiateViewController(withIdentifier: "MemeDetailViewController") as! MemeDetailViewController
+        let meme = self.memes[ (indexPath as NSIndexPath).row ]
+        vc.meme = meme
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         self.tableView.rowHeight = CGFloat(100.00)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(SentMemesTableViewController.addMeme))
     
